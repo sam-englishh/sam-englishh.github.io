@@ -1,10 +1,21 @@
 ---
-title: "sam-englishh.github.io"
+title: "Sam English"
+image: Samy12Photo
+toc: false
+about: 
+3  template: solana
+4  image-shape: round
+  image-width: 17em
+5  links:
+    - text: LinkedIn
+      href: https://www.linkedin.com/in/sam-english-2461bb252
+    - text: GitHub
+      href: https://github.com/sam-englishh
+    - text: Email
+      href: mailto:sfey2023@mymail.pomona.edu
 ---
 
-This is a Quarto website.
-
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+Biography.
 
 ```{r}
 1 + 1
