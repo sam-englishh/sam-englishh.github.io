@@ -2,8 +2,14 @@
 title: "About"
 ---
 
-About this site
+About Me:
+
+My name is Sam and I am learning how to code with R and this is my first website! I am majoring in Economics and planning to minor in Data Science. I enjoy working with numbers and data to explain my reasoning and love learning about different ways to present data. Have a look at the data visualizations I made on my website :)
+
+About This Website:
+
+This website has two data visualizations about topics I am interested in, chocolate and soccer. You can find the graphs in the "Data Visualizations" tab. The chocolate graph shows the relationship between cocoa percentage and flavour ratings of chocolate bars. The soccer graph shows the number of goals scored at each world cup since its origin.
 
 ```{r}
-1 + 1
+
 ```

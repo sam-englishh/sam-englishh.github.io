@@ -1,0 +1,43 @@
+---
+title: "Chocolate Ratings"
+description: |
+  Ratings of different chocolates from TidyTuesday
+author: Sam English
+date: September 15, 2024
+format: html
+---
+
+```{r, message = FALSE, warning = FALSE}
+tuesdata <- tidytuesdayR::tt_load('2022-11-29')
+tuesdata <- tidytuesdayR::tt_load(2022, week = 48)
+tuesdata <- tidytuesdayR::tt_load('2022-01-18')
+tuesdata <- tidytuesdayR::tt_load(2022, week = 3)
+
+chocolate <- tuesdata$chocolate
+```
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+```
+
+Below is a graph that shows the relationship between the percent of cocoa in a chocolate bar and how it is rated on a scale of 1 to 5.
+
+```{r, message = FALSE, warning = FALSE}
+
+summary_data <- chocolate |>
+  select(cocoa_percent, rating) |>
+  group_by(cocoa_percent) |>
+  summarise(ave_rating = mean(rating))
+
+summary_data$cocoa_percent <- as.numeric(gsub("%", "", summary_data$cocoa_percent))
+
+ggplot(summary_data, aes(x = cocoa_percent, y = ave_rating)) +
+  geom_point() +
+  geom_smooth(se = FALSE) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(
+    x = "Percent of Cocoa in Chocolate Bar",
+    y = "Rating",
+    title = "Rating of Chocolate Bar by Percent Cocoa"
+  )
+```

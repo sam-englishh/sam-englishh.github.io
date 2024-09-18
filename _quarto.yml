@@ -3,18 +3,26 @@ project:
   output-dir: docs
 
 website:
-  title: "sam-englishh.github.io"
+  title: "Sam English"
   navbar:
     left:
       - href: index.qmd
         text: Home
-      - about.qmd
+      - text: About
+        href: about.qmd
+      - text: "Data Viz"
+        menu: 
+         - text: "Chocolate Ratings"
+           href: ChocolateRatings.html
+         - text: "World Cup"
+           href: WorldCup.html
 
 format:
   html:
     theme: cosmo
     css: styles.css
     toc: true
+    page-layout: full
 
 editor: visual
 

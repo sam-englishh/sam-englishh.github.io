@@ -4,13 +4,27 @@
     "href": "about.html",
     "title": "About",
     "section": "",
-    "text": "About this site\n\n1 + 1\n\n[1] 2"
+    "text": "About Me:\nMy name is Sam and I am learning how to code with R and this is my first website! I am majoring in Economics and planning to minor in Data Science. I enjoy working with numbers and data to explain my reasoning and love learning about different ways to present data. Have a look at the data visualizations I made on my website :)\nAbout This Website:\nThis website has two data visualizations about topics I am interested in, chocolate and soccer. You can find the graphs in the “Data Visualizations” tab. The chocolate graph shows the relationship between cocoa percentage and flavour ratings of chocolate bars. The soccer graph shows the number of goals scored at each world cup since its origin."
   },
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "sam-englishh.github.io",
+    "title": "Sam English",
     "section": "",
-    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\n\n1 + 1\n\n[1] 2"
+    "text": "Hi! My name is Sam and I am learning how to code with R and this is my first website! I am majoring in Economics and planning to minor in Data Science. I enjoy working with numbers and data to explain my reasoning and love learning about different ways to present data. Have a look at the data visualizations I made on my website :)"
+  },
+  {
+    "objectID": "ChocolateRatings.html",
+    "href": "ChocolateRatings.html",
+    "title": "Chocolate Ratings",
+    "section": "",
+    "text": "tuesdata &lt;- tidytuesdayR::tt_load('2022-11-29')\ntuesdata &lt;- tidytuesdayR::tt_load(2022, week = 48)\ntuesdata &lt;- tidytuesdayR::tt_load('2022-01-18')\ntuesdata &lt;- tidytuesdayR::tt_load(2022, week = 3)\n\nchocolate &lt;- tuesdata$chocolate\n\n\nlibrary(tidyverse)\n\nBelow is a graph that shows the relationship between the percent of cocoa in a chocolate bar and how it is rated on a scale of 1 to 5.\n\nsummary_data &lt;- chocolate |&gt;\n  select(cocoa_percent, rating) |&gt;\n  group_by(cocoa_percent) |&gt;\n  summarise(ave_rating = mean(rating))\n\nsummary_data$cocoa_percent &lt;- as.numeric(gsub(\"%\", \"\", summary_data$cocoa_percent))\n\nggplot(summary_data, aes(x = cocoa_percent, y = ave_rating)) +\n  geom_point() +\n  geom_smooth(se = FALSE) +\n  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +\n  labs(\n    x = \"Percent of Cocoa in Chocolate Bar\",\n    y = \"Rating\",\n    title = \"Rating of Chocolate Bar by Percent Cocoa\"\n  )"
+  },
+  {
+    "objectID": "WorldCup.html",
+    "href": "WorldCup.html",
+    "title": "World Cup",
+    "section": "",
+    "text": "library(tidyverse)\n\nBelow is a graph that shows the number of goals scored at each world cup.\n\nworldcups &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-11-29/worldcups.csv')\n\nggplot(worldcups, aes(x = year, y = goals_scored)) + \n  geom_point() + \n  geom_smooth(se = FALSE) +\n  labs(\n    x = \"World Cup Year\",\n    y = \"Number of Goals Scored\",\n    title = \"Number of Goals Scored Per World Cup\"\n  )"
   }
 ]

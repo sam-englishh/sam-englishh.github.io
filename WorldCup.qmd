@@ -1,0 +1,28 @@
+---
+title: "World Cup"
+description: |
+  Data from Every World Cup Match from TidyTuesday
+author: Sam English
+date: September 15, 2024
+format: html
+---
+
+```{r, message = FALSE, warning = FALSE}
+library(tidyverse)
+```
+
+Below is a graph that shows the number of goals scored at each world cup.
+
+```{r, message = FALSE, warning = FALSE}
+
+worldcups <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-11-29/worldcups.csv')
+
+ggplot(worldcups, aes(x = year, y = goals_scored)) + 
+  geom_point() + 
+  geom_smooth(se = FALSE) +
+  labs(
+    x = "World Cup Year",
+    y = "Number of Goals Scored",
+    title = "Number of Goals Scored Per World Cup"
+  )
+```
