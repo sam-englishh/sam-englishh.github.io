@@ -16,6 +16,8 @@ website:
            href: ChocolateRatings.html
          - text: "World Cup"
            href: WorldCup.html
+         - text: "Netflix Titles"
+           href: Mini Project 2.html
 
 format:
   html:

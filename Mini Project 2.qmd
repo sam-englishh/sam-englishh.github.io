@@ -1,0 +1,117 @@
+---
+title: "Mini Project 2"
+author: "Sam English"
+date: 10/02/2024
+---
+
+```{r}
+
+tuesdata <- tidytuesdayR::tt_load('2021-04-20')
+tuesdata <- tidytuesdayR::tt_load(2021, week = 17)
+
+netflix <- tuesdata$netflix
+
+netflix
+
+```
+
+```{r}
+
+library(dplyr)
+library(tidytext)
+library(tidyr)
+library(stringr)
+library(ggplot2)
+
+```
+
+```{r}
+stop_words <- c("the", "a", "of", "and", "in", "on", "with", "is", "to", "for", "at", "s", "2", "i")
+
+common_words <- netflix |>
+  mutate(title = str_to_lower(title),                               
+         title = str_replace_all(title, "[[:punct:]]", " ")) |>     
+  rowwise() |>                                                      
+  mutate(words = str_split(title, "\\s+")) |>                       
+  unnest(words) |>                                                  
+  filter(!words %in% stop_words,                                     
+         words != "") |>                                            
+  group_by(words) |>                                      
+  mutate(n = n()) |>                                            
+  arrange(desc(n)) |>                                          
+  distinct(words, n, .keep_all = TRUE) |>
+  select(words, n) |>
+  head(10)
+
+common_words
+
+```
+
+```{r}
+
+ggplot(common_words, aes(x = reorder(words, -n),  y = n)) + 
+  geom_bar(stat = "identity", fill = "pink") +
+  labs(title = "Most Common Words in Netflix Titles", 
+       x = "Words", 
+       y = "Frequency") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+
+```
+```{r}
+
+netflix_by_year <- netflix |>
+  group_by(release_year, type) |>
+  summarise(count = n())  
+
+netflix_by_year
+
+ggplot(netflix_by_year, aes(x = release_year, y = count, color = type)) +
+  geom_line() +
+  labs(title = "Number of Movies and TV Shows Released by Year on Netflix", 
+       x = "Release Year", 
+       y = "Count") +
+  theme_minimal()
+
+```
+
+```{r}
+
+total_titles <- nrow(netflix)
+
+prop_titles <- netflix |>
+  mutate(title = str_to_lower(title)) |> 
+  summarise(
+    count_numbers = sum(str_detect(title, "\\d")),  
+    count_the_anywhere = sum(str_detect(title, "the")),  
+    count_the_start = sum(str_detect(title, "^the"))  
+  ) |>
+  mutate(
+    proportion_the_anywhere = count_the_anywhere / total_titles, 
+    proportion_start_with_the = count_the_start / total_titles, 
+    proportion_with_numbers = count_numbers / total_titles  
+  )
+
+prop_titles
+
+prop_titles_long <- prop_titles |>
+  pivot_longer(
+    cols = starts_with("proportion"),  # Select all proportion columns
+    names_to = "condition",              # New column for condition names
+    values_to = "proportion"             # New column for proportions
+  ) |>
+  select(condition, proportion)
+
+prop_titles_long 
+
+ggplot(prop_titles_long, aes(x = condition, y = proportion)) +
+  geom_bar(stat = "identity") +
+  labs(
+    title = "Proportions of Titles in Netflix",
+    x = "Title Condition",
+    y = "Proportion",
+    fill = "Condition"
+  )
+```
+
+
+
