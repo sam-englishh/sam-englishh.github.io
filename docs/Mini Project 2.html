@@ -282,6 +282,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+<p>This plot shows the most common occurring words in Netflix titles, if you remove stock words such as “the”, “and” and “of”. Some obvious ‘buzzwords’ include “love,”story” and “movie”. Some key words that surprised me include “christmas”, but it also makes sense as Christmas movies, much like songs, are very popular at that specific time of year. “Man” is also an interesting observation considering there is no appearance of “woman” in the top 10 words.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>netflix_by_year <span class="ot">&lt;-</span> netflix <span class="sc">|&gt;</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(release_year, type) <span class="sc">|&gt;</span></span>
@@ -319,6 +320,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+<p>This graph shows the number of movies and TV shows and their corresponding release years. It shows the increase in number of movies as the year heads towards present day. It also demonstrates the disparity of movies vs.&nbsp;TV shows. And that there has always been more movies than TT shows on Netflix. An interesting observation is in 2021, where there is growth in the number of TV shows released in this year, and a decline in movies. It is also cool to note that the earliest title on Netflix was released in 1925, and it is a TV show!!</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>total_titles <span class="ot">&lt;-</span> <span class="fu">nrow</span>(netflix)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -330,45 +332,47 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">count_the_start =</span> <span class="fu">sum</span>(<span class="fu">str_detect</span>(title, <span class="st">"^the"</span>))  </span>
 <span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
 <span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">proportion_the_anywhere =</span> count_the_anywhere <span class="sc">/</span> total_titles, </span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">proportion_start_with_the =</span> count_the_start <span class="sc">/</span> total_titles, </span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">proportion_with_numbers =</span> count_numbers <span class="sc">/</span> total_titles  </span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">The_Anywhere =</span> count_the_anywhere <span class="sc">/</span> total_titles, </span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">Start_With_The =</span> count_the_start <span class="sc">/</span> total_titles, </span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">Digit_Anywhere =</span> count_numbers <span class="sc">/</span> total_titles  </span>
 <span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>prop_titles</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 6
-  count_numbers count_the_anywhere count_the_start proportion_the_anywhere
-          &lt;int&gt;              &lt;int&gt;           &lt;int&gt;                   &lt;dbl&gt;
-1           426               1898             997                   0.244
-# ℹ 2 more variables: proportion_start_with_the &lt;dbl&gt;,
-#   proportion_with_numbers &lt;dbl&gt;</code></pre>
+  count_numbers count_the_anywhere count_the_start The_Anywhere Start_With_The
+          &lt;int&gt;              &lt;int&gt;           &lt;int&gt;        &lt;dbl&gt;          &lt;dbl&gt;
+1           426               1898             997        0.244          0.128
+# ℹ 1 more variable: Digit_Anywhere &lt;dbl&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>prop_titles_long <span class="ot">&lt;-</span> prop_titles <span class="sc">|&gt;</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">"proportion"</span>),  <span class="co"># Select all proportion columns</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"condition"</span>,              <span class="co"># New column for condition names</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"proportion"</span>             <span class="co"># New column for proportions</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="fu">c</span>(The_Anywhere, Start_With_The, Digit_Anywhere),  </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"condition"</span>,              </span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"proportion"</span>             </span>
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
 <span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(condition, proportion)</span>
 <span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>prop_titles_long </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 2
-  condition                 proportion
-  &lt;chr&gt;                          &lt;dbl&gt;
-1 proportion_the_anywhere       0.244 
-2 proportion_start_with_the     0.128 
-3 proportion_with_numbers       0.0547</code></pre>
+  condition      proportion
+  &lt;chr&gt;               &lt;dbl&gt;
+1 The_Anywhere       0.244 
+2 Start_With_The     0.128 
+3 Digit_Anywhere     0.0547</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(prop_titles_long, <span class="fu">aes</span>(<span class="at">x =</span> condition, <span class="at">y =</span> proportion)) <span class="sc">+</span></span>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(prop_titles_long, <span class="fu">aes</span>(<span class="at">x =</span> condition, <span class="at">y =</span> proportion, <span class="at">fill =</span> condition)) <span class="sc">+</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Proportions of Titles in Netflix"</span>,</span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Title Condition"</span>,</span>
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Proportion"</span>,</span>
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Condition"</span></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>percent) <span class="sc">+</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -377,6 +381,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+<p>This plot shows the proportions of titles that start with “the”, contain “the” or contain any digit. Almost exactly twice as many titles contain “the” anywhere in the title than titles that start with “the”. Almost a quarter of Netflix titles contain the word “the”. Far fewer titles contain digits, at only 5.5%.</p>
 
 
 
