@@ -4,6 +4,8 @@ author: "Sam English"
 date: 10/02/2024
 ---
 
+This analysis uses data from the tidy tuesday data source on titles of Netflix movies and TV show. [Netflix Titles](https://github.com/rfordatascience/tidytuesday/blob/master/data/2021/2021-04-20/readme.md)
+
 ```{r, message = FALSE, warning = FALSE}
 
 tuesdata <- tidytuesdayR::tt_load('2021-04-20')
