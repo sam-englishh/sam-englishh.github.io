@@ -1,0 +1,63 @@
+---
+title: "Mini Project 3"
+author: "Sam English"
+date: 11/08/2024
+---
+
+Research Question: Is there a significant relationship between parents using marijuana and their children’s marijuana usage?
+
+In this project, I plan to investigate the potential relationship between parental and child marijuana use using a permutation test. First, I will calculate the observed difference in the rate of marijuana use among children based on whether their parents also use marijuana. Then, I’ll perform a permutation test by shuffling the parental usage labels multiple times (1,000 permutations) to simulate the distribution of differences under the null hypothesis of no relationship. Finally, I’ll compare the observed difference to this simulated distribution to determine if the observed association is statistically significant, and I’ll visualize the results to support my findings.
+
+```{r, message = FALSE, warning = FALSE}
+library(openintro)
+data(drug_use)
+```
+
+```{r}
+str(drug_use)
+summary(drug_use)
+```
+```{r}
+library(dplyr)
+observed_data <- drug_use |>
+  group_by(parents) |>
+  summarise(child_use_avg = mean(student == "uses")) |>
+  summarise(difference = diff(child_use_avg)) |>
+  pull(difference)
+observed_data
+```
+
+```{r}
+library(purrr)
+perm_test <- function(data) {
+  data |>
+    mutate(student_samp = sample(student, replace = FALSE)) |>
+    group_by(parents) |>
+    summarise(child_use_avg = mean(student_samp == "uses")) |>
+    summarise(difference = diff(child_use_avg)) |>
+    pull(difference)
+}
+n_perm <- 1000
+
+perm_results <- map_dbl(1:n_perm, ~perm_test(drug_use))
+```
+
+
+```{r}
+library(ggplot2)
+
+ggplot(data.frame(perm_results), aes(x = perm_results)) +
+  geom_histogram(bins = 30, color = "black", fill = "skyblue") +
+  geom_vline(xintercept = observed_data, color = "red") +
+  labs(title = "Permutation Test: Difference in Child Marijuana Use Rates",
+       x = "Difference in Rates", y = "Frequency") +
+  theme_minimal()
+```
+```{r}
+p_value <- mean(perm_results >= observed_data)
+p_value
+```
+
+In this analysis, I investigated the association between parental and child marijuana use using a permutation test. I first calculated the observed difference in child marijuana use rates based on whether parents used marijuana. After running 1,000 permutations to generate a distribution of differences under the null hypothesis (assuming no relationship between parental and child use), I found a p-value of 0. This indicates that none of the randomly shuffled differences were as extreme as the observed difference, suggesting a very strong association between parental and child marijuana use that is unlikely to have occurred by chance.
+
+It’s important to note that the dataset’s representativeness is uncertain; we don’t know the source population or whether the sample accurately reflects broader demographics. As such, these results might not generalize to the global population, as factors such as cultural context and socioeconomic status could influence these behaviors in ways not captured here.

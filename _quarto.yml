@@ -12,12 +12,17 @@ website:
         href: about.qmd
       - text: "Data Viz"
         menu: 
-         - text: "Chocolate Ratings"
-           href: ChocolateRatings.html
-         - text: "World Cup"
-           href: WorldCup.html
-         - text: "Netflix Titles"
-           href: Mini Project 2.html
+          - text: "Chocolate Ratings"
+            href: ChocolateRatings.html
+          - text: "World Cup"
+            href: WorldCup.html
+          - text: "Netflix Titles"
+            href: "Mini Project 2.html"
+          - text: "Parental vs. Child Marijuana Use"
+            href: "MiniProject3.html"
+
+         
+         
 
 format:
   html:
