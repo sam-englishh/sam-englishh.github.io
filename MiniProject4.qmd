@@ -1,0 +1,166 @@
+---
+title: "MiniProject4.qmd"
+author: "Sam English"
+date: 11/26/2024
+execute: 
+  warning: false
+  message: false
+---
+
+In this analysis, I aim to explore the Wideband Acoustic Immittance (WAI) database by recreating a plot of mean absorbance versus frequency for studies in the database. First, I will extract the data needed to recreate a plot similar to the one in Voss, including mean absorbance for each study, the number of unique ears, and the instruments used. Then, I will identify a study with participants from diverse demographic groups (e.g., males and females) and analyze differences in mean absorbance between these groups. This will involve grouping the data by study, demographic groups, and frequency and visualizing the trends.
+
+The data used in this analysis was obtained from the [Wideband Acoustic Immittance (WAI) Database](https://pmc.ncbi.nlm.nih.gov/articles/PMC7093226/figure/F1/) hosted by Smith College. The WAI database compiles published WAI measurements, which serve as noninvasive auditory diagnostic tools. These measurements include data from various peer-reviewed studies, and details about the database are available in the publication by Voss et al. (2019).
+
+
+```{r}
+library(tidyverse)
+library(RMariaDB)
+con_wai <- dbConnect(
+  MariaDB(), host = "scidb.smith.edu",
+  user = "waiuser", password = "smith_waiDB", 
+  dbname = "wai"
+)
+Measurements <- tbl(con_wai, "Measurements")
+PI_Info <- tbl(con_wai, "PI_Info")
+Subjects <- tbl(con_wai, "Subjects")
+
+Measurements
+PI_Info
+Subjects
+```
+
+```{r}
+dbListTables(con_wai)
+```
+
+```{sql, connection=con_wai}
+SHOW TABLES;
+```
+```{sql, connection=con_wai}
+DESCRIBE Measurements;
+```
+
+```{sql, connection=con_wai}
+SELECT *
+FROM Measurements
+LIMIT 0, 5;
+```
+```{sql, connection=con_wai}
+SELECT 
+  Measurements.Identifier,
+  COUNT(DISTINCT CONCAT(Measurements.SubjectNumber, Measurements.Ear)) AS Unique_Ears,
+  PI_Info.AuthorsShortList,
+  Measurements.Instrument,
+  Measurements.Frequency,
+  AVG(Measurements.Absorbance) AS MeanAbsorbance,
+  CONCAT(PI_Info.AuthorsShortList, ' et al. N=', 
+         COUNT(DISTINCT CONCAT(Measurements.SubjectNumber, Measurements.Ear)), ', ', Measurements.Instrument) AS LegendLabel
+FROM Measurements
+JOIN PI_Info ON Measurements.Identifier = PI_Info.Identifier
+WHERE Measurements.Identifier IN ('Abur_2014', 'Feeney_207', 'Groon_2015', 'Lewis_2015', 'Liu_2008', 'Rosowski_2012', 'Shahnaz_2006', 'Shaver_2013', 'Sun_2016', 'Voss_1994', 'Voss_2010', 'Werner_2010')
+GROUP BY Measurements.Identifier, Measurements.Instrument, PI_Info.AuthorsShortList, Measurements.Frequency;
+```
+
+
+```{sql, connection=con_wai, output.var="data"}
+SELECT 
+  Measurements.Identifier,
+  COUNT(DISTINCT CONCAT(Measurements.SubjectNumber, Measurements.Ear)) AS Unique_Ears,
+  PI_Info.AuthorsShortList,
+  Measurements.Instrument,
+  Measurements.Frequency,
+  AVG(Measurements.Absorbance) AS MeanAbsorbance,
+  CONCAT(PI_Info.AuthorsShortList, ' et al. N=', 
+         COUNT(DISTINCT CONCAT(Measurements.SubjectNumber, Measurements.Ear)), ', ', Measurements.Instrument) AS LegendLabel
+FROM Measurements
+JOIN PI_Info ON Measurements.Identifier = PI_Info.Identifier
+WHERE Measurements.Identifier IN ('Abur_2014', 'Feeney_207', 'Groon_2015', 'Lewis_2015', 'Liu_2008', 'Rosowski_2012', 'Shahnaz_2006', 'Shaver_2013', 'Sun_2016', 'Voss_1994', 'Voss_2010', 'Werner_2010')
+GROUP BY Measurements.Identifier, Measurements.Instrument, PI_Info.AuthorsShortList, Measurements.Frequency;
+```
+
+
+
+```{r, fig.height=8, fig.width=8}
+data$Frequency <- as.numeric(data$Frequency)
+data <- data |>
+  filter(Frequency >= 200)
+
+ggplot(data, aes(x = Frequency, y = MeanAbsorbance, color = LegendLabel)) +
+  geom_line(size = 0.8) +
+  labs(
+    title = "Mean absorbance from each publication in WAI database",
+    x = "Frequency (Hz)",
+    y = "Mean Absorbance",
+    color = NULL
+  ) +
+  theme_minimal() +
+  scale_x_continuous(
+    trans = "log10",
+    breaks = c(200, 400, 600, 800, 1000, 2000, 4000, 6000, 8000),
+    labels = c("200", "400", "600", "800", "1000", "2000", "4000", "6000", "8000"),
+    limits = c(200, 8000)
+  ) +
+  scale_y_continuous(
+    limits = c(0, 1),
+    expand = c(0, 0)
+  ) +
+  theme(
+    legend.position = "right",
+    legend.text = element_text(size = 8), 
+    plot.title = element_text(hjust = 0.5)
+  )
+```
+
+This plot shows the mean absorbance at various frequencies for multiple studies in the WAI database. Each line represents a study, and the legend provides detailed information about the study, including the author, number of unique ears included (N), and the instrument used. The x-axis is scaled logarithmically to reflect the wide range of tested frequencies, while the y-axis displays mean absorbance, ranging from 0 to 1. This plot allows for a comparison of absorbance patterns across studies, highlighting similarities and subtle differences in how absorbance varies with frequency. The visualisation looks identical to the graph found online. Although I tried my best to recreate the legend to be exactly the same as online, this was as close as I could get. 
+
+```{sql, connection=con_wai}
+SELECT 
+  Subjects.Sex, 
+  Measurements.Frequency, 
+  AVG(Measurements.Absorbance) AS MeanAbsorbance
+FROM Measurements
+JOIN Subjects ON Measurements.SubjectNumber = Subjects.SubjectNumber
+WHERE Measurements.Identifier = 'Abur_2014'
+GROUP BY Subjects.Sex, Measurements.Frequency;
+```
+```{sql, connection=con_wai, output.var="second_data"}
+SELECT 
+  Subjects.Sex, 
+  Measurements.Frequency, 
+  AVG(Measurements.Absorbance) AS MeanAbsorbance
+FROM Measurements
+JOIN Subjects ON Measurements.SubjectNumber = Subjects.SubjectNumber
+WHERE Measurements.Identifier = 'Abur_2014'
+GROUP BY Subjects.Sex, Measurements.Frequency;
+```
+
+```{r, fig.height=9, fig.width=8}
+ggplot(second_data, aes(x = Frequency, y = MeanAbsorbance, color = Sex)) +
+  geom_line(size = 1) +
+  labs(
+    title = "Frequency vs. Mean Absorbance by Sex (Abur_2014)",
+    x = "Frequency (Hz)",
+    y = "Mean Absorbance",
+    color = "Sex"
+  ) +
+  theme_minimal() +
+  scale_x_continuous(
+    trans = "log10",
+    breaks = c(200, 400, 600, 800, 1000, 2000, 4000, 6000, 8000),
+    labels = c("200", "400", "600", "800", "1000", "2000", "4000", "6000", "8000"),
+    limits = c(200, 8000)
+  ) +
+  scale_y_continuous(
+    limits = c(0, 1),
+    expand = c(0, 0)
+  ) +
+  theme(
+    legend.position = "right",
+    plot.title = element_text(hjust = 0.5)
+  )
+```
+This plot focuses on the Abur_2014 study and compares mean absorbance across frequencies for people who identify as males, females or unknown sexes. Three distinct lines represent the groups, with each point indicating the mean absorbance for a specific frequency. The x-axis is scaled logarithmically, and the y-axis shows absorbance values. The plot reveals that the patterns in mean absorbance by men and women across Abur's 2014 study are very similar. The line that strays from the common relationship is the data recording people where their sex was unkown. This could be due to far fewer data points, and thus a mean that is more likely to deviate from the population mean. 
+
+In this project, I recreated a plot showing mean absorbance versus frequency for multiple studies in the WAI database, enriching the legend with information about the number of unique ears and instruments used in each study. The plot highlights the similarities and differences in absorbance patterns across studies while maintaining consistent formatting with prior work.
+
+Additionally, I analyzed data from the Abur_2014 study to explore differences in mean absorbance between males, females and people with an unknown sex. By plotting frequency versus mean absorbance for each group, there was seemingly no difference between womens' and mens' mean absorbance along the different frequencies. 
