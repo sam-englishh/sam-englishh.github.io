@@ -11,9 +11,35 @@ format: html
 library(tidyverse)
 ```
 
-Below is a graph that shows the number of goals scored at each world cup.
+In this project, my first time using the data visualization tools learnt in my introductory data science course, I aimed to represent the increase in the number of goals scored at each soccer (football) World Cup between the first in 1930 and the one held in Russia in 2018. 
+
+I retrieved this data from the 'tidytuesday' data set titled "World Cup":
+
+<https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-11-29/worldcups.csv>
+
+The purpose of the data set was to show information about all of the World Cups before the start of the next in 2022, which was to be hosted in Qatar starting on 11/20/2022.
+
+I sourced the data for this analysis from TidyTuesday, a project that curates weekly datasets for learning and exploration. The dataset, originally created by Evan Gower and published on Kaggle, focuses on FIFA World Cup statistics.
+
+Here is the data set that I used to present my findings.
 
 ```{r, message = FALSE, warning = FALSE}
+worldcups <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-11-29/worldcups.csv')
+worldcups
+```
+This table contains information about the results, host country, and matches played. This information isn't necessary for my visualization.
+
+Here is the data that I actually used in my visualization:
+
+```{r, message = FALSE, warning = FALSE}
+worldcups |>
+  group_by(year) |>
+  select(goals_scored)
+```
+
+Below is a graph that shows the number of goals scored at each world cup.
+
+```{r, fig.alt="A scatterplot showing the number of goals scored at each World Cup from 1930 to 2018. The graph includes points for each year and a trendline indicating an overall increase in goals scored over time.", message = FALSE, warning = FALSE}
 
 worldcups <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-11-29/worldcups.csv')
 

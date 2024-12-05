@@ -146,6 +146,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="./WorldCup.html">
  <span class="dropdown-text">World Cup</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="./Mini Project 2.html">
+ <span class="dropdown-text">Netflix Titles</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./MiniProject3.html">
+ <span class="dropdown-text">Parental vs.&nbsp;Child Marijuana Use</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./MiniProject4.html">
+ <span class="dropdown-text">Auditory Analysis with WAI Data</span></a>
+  </li>  
     </ul>
   </li>
 </ul>
@@ -204,22 +216,72 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Below is a graph that shows the number of goals scored at each world cup.</p>
+<p>In this project, my first time using the data visualization tools learnt in my introductory data science course, I aimed to represent the increase in the number of goals scored at each soccer (football) World Cup between the first in 1930 and the one held in Russia in 2018.</p>
+<p>I retrieved this data from the ‘tidytuesday’ data set titled “World Cup”:</p>
+<p><a href="https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-11-29/worldcups.csv" class="uri">https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-11-29/worldcups.csv</a></p>
+<p>The purpose of the data set was to show information about all of the World Cups before the start of the next in 2022, which was to be hosted in Qatar starting on 11/20/2022.</p>
+<p>I sourced the data for this analysis from TidyTuesday, a project that curates weekly datasets for learning and exploration. The dataset, originally created by Evan Gower and published on Kaggle, focuses on FIFA World Cup statistics.</p>
+<p>Here is the data set that I used to present my findings.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>worldcups <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-11-29/worldcups.csv'</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(worldcups, <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> goals_scored)) <span class="sc">+</span> </span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"World Cup Year"</span>,</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Number of Goals Scored"</span>,</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Number of Goals Scored Per World Cup"</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>worldcups</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 21 × 10
+    year host     winner second third fourth goals_scored teams games attendance
+   &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;
+ 1  1930 Uruguay  Urugu… Argen… USA   Yugos…           70    13    18     434000
+ 2  1934 Italy    Italy  Czech… Germ… Austr…           70    16    17     395000
+ 3  1938 France   Italy  Hunga… Braz… Sweden           84    15    18     483000
+ 4  1950 Brazil   Urugu… Brazil Swed… Spain            88    13    22    1337000
+ 5  1954 Switzer… West … Hunga… Aust… Urugu…          140    16    26     943000
+ 6  1958 Sweden   Brazil Sweden Fran… West …          126    16    35     868000
+ 7  1962 Chile    Brazil Czech… Chile Yugos…           89    16    32     776000
+ 8  1966 England  Engla… West … Port… Sovie…           89    16    32    1614677
+ 9  1970 Mexico   Brazil Italy  West… Urugu…           95    16    32    1673975
+10  1974 Germany  West … Nethe… Pola… Brazil           97    16    38    1774022
+# ℹ 11 more rows</code></pre>
+</div>
+</div>
+<p>This table contains information about the results, host country, and matches played. This information isn’t necessary for my visualization.</p>
+<p>Here is the data that I actually used in my visualization:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>worldcups <span class="sc">|&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year) <span class="sc">|&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(goals_scored)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 21 × 2
+# Groups:   year [21]
+    year goals_scored
+   &lt;dbl&gt;        &lt;dbl&gt;
+ 1  1930           70
+ 2  1934           70
+ 3  1938           84
+ 4  1950           88
+ 5  1954          140
+ 6  1958          126
+ 7  1962           89
+ 8  1966           89
+ 9  1970           95
+10  1974           97
+# ℹ 11 more rows</code></pre>
+</div>
+</div>
+<p>Below is a graph that shows the number of goals scored at each world cup.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>worldcups <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-11-29/worldcups.csv'</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(worldcups, <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> goals_scored)) <span class="sc">+</span> </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"World Cup Year"</span>,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Number of Goals Scored"</span>,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Number of Goals Scored Per World Cup"</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="WorldCup_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="WorldCup_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" alt="A scatterplot showing the number of goals scored at each World Cup from 1930 to 2018. The graph includes points for each year and a trendline indicating an overall increase in goals scored over time." width="672"></p>
 </figure>
 </div>
 </div>

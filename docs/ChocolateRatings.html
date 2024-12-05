@@ -146,6 +146,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="./WorldCup.html">
  <span class="dropdown-text">World Cup</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="./Mini Project 2.html">
+ <span class="dropdown-text">Netflix Titles</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./MiniProject3.html">
+ <span class="dropdown-text">Parental vs.&nbsp;Child Marijuana Use</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./MiniProject4.html">
+ <span class="dropdown-text">Auditory Analysis with WAI Data</span></a>
+  </li>  
     </ul>
   </li>
 </ul>
@@ -201,43 +213,95 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<p>In the second part of my first project for my introductory data science course, I chose to visualize data that contains information about varying chocolates. The goal of my analysis and visualization is to display the ratings of different chocolates based on the percent of cocoa in them.</p>
+<p>I retrieved this data from the ‘tidytuesday’ data set titled “Chocolate Ratings”:</p>
+<p><a href="https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2022/2022-01-18/chocolate.csv" class="uri">https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2022/2022-01-18/chocolate.csv</a></p>
+<p>This dataset exists to provide information about various chocolate bars, including their ratings, origin, and cocoa percentages, helping to explore trends in chocolate quality and production.</p>
+<p>I sourced the data for this analysis from TidyTuesday, a project that curates weekly datasets for learning and exploration. The dataset, originally compiled by Georgios and Kelsey and published on the “Flavors of Cocoa” website, offers a detailed look into the world of chocolate ratings and origins.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>tuesdata <span class="ot">&lt;-</span> tidytuesdayR<span class="sc">::</span><span class="fu">tt_load</span>(<span class="st">'2022-11-29'</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>tuesdata <span class="ot">&lt;-</span> tidytuesdayR<span class="sc">::</span><span class="fu">tt_load</span>(<span class="dv">2022</span>, <span class="at">week =</span> <span class="dv">48</span>)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>tuesdata <span class="ot">&lt;-</span> tidytuesdayR<span class="sc">::</span><span class="fu">tt_load</span>(<span class="st">'2022-01-18'</span>)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>tuesdata <span class="ot">&lt;-</span> tidytuesdayR<span class="sc">::</span><span class="fu">tt_load</span>(<span class="dv">2022</span>, <span class="at">week =</span> <span class="dv">3</span>)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>chocolate <span class="ot">&lt;-</span> tuesdata<span class="sc">$</span>chocolate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>tuesdata <span class="ot">&lt;-</span> tidytuesdayR<span class="sc">::</span><span class="fu">tt_load</span>(<span class="st">'2022-01-18'</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>tuesdata <span class="ot">&lt;-</span> tidytuesdayR<span class="sc">::</span><span class="fu">tt_load</span>(<span class="dv">2022</span>, <span class="at">week =</span> <span class="dv">3</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>chocolate <span class="ot">&lt;-</span> tuesdata<span class="sc">$</span>chocolate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>Here is the entire dataset that I used in my visualization.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>chocolate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2,530 × 10
+     ref company_manufacturer company_location review_date
+   &lt;dbl&gt; &lt;chr&gt;                &lt;chr&gt;                  &lt;dbl&gt;
+ 1  2454 5150                 U.S.A.                  2019
+ 2  2458 5150                 U.S.A.                  2019
+ 3  2454 5150                 U.S.A.                  2019
+ 4  2542 5150                 U.S.A.                  2021
+ 5  2546 5150                 U.S.A.                  2021
+ 6  2546 5150                 U.S.A.                  2021
+ 7  2542 5150                 U.S.A.                  2021
+ 8   797 A. Morin             France                  2012
+ 9   797 A. Morin             France                  2012
+10  1011 A. Morin             France                  2013
+# ℹ 2,520 more rows
+# ℹ 6 more variables: country_of_bean_origin &lt;chr&gt;,
+#   specific_bean_origin_or_bar_name &lt;chr&gt;, cocoa_percent &lt;chr&gt;,
+#   ingredients &lt;chr&gt;, most_memorable_characteristics &lt;chr&gt;, rating &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>Once again, it contains a lot of information, most of it unnecessary for the purposes of my visualization.</p>
+<p>Here is the data that I actually used.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>chocolate <span class="sc">|&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cocoa_percent =</span> <span class="fu">as.numeric</span>(<span class="fu">sub</span>(<span class="st">"%"</span>, <span class="st">""</span>, cocoa_percent))) <span class="sc">|&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(cocoa_percent, rating) <span class="sc">|&gt;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(cocoa_percent) <span class="sc">|&gt;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(cocoa_percent) <span class="sc">|&gt;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">ave_rating =</span> <span class="fu">mean</span>(rating))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 46 × 2
+   cocoa_percent ave_rating
+           &lt;dbl&gt;      &lt;dbl&gt;
+ 1          42         2.75
+ 2          46         2.75
+ 3          50         3.75
+ 4          53         2   
+ 5          55         2.86
+ 6          56         3.25
+ 7          57         2.75
+ 8          58         3.12
+ 9          60         3.01
+10          60.5       2.75
+# ℹ 36 more rows</code></pre>
+</div>
 </div>
 <p>Below is a graph that shows the relationship between the percent of cocoa in a chocolate bar and how it is rated on a scale of 1 to 5.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>summary_data <span class="ot">&lt;-</span> chocolate <span class="sc">|&gt;</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(cocoa_percent, rating) <span class="sc">|&gt;</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(cocoa_percent) <span class="sc">|&gt;</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">ave_rating =</span> <span class="fu">mean</span>(rating))</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>summary_data<span class="sc">$</span>cocoa_percent <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">"%"</span>, <span class="st">""</span>, summary_data<span class="sc">$</span>cocoa_percent))</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(summary_data, <span class="fu">aes</span>(<span class="at">x =</span> cocoa_percent, <span class="at">y =</span> ave_rating)) <span class="sc">+</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Percent of Cocoa in Chocolate Bar"</span>,</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Rating"</span>,</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Rating of Chocolate Bar by Percent Cocoa"</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>summary_data <span class="ot">&lt;-</span> chocolate <span class="sc">|&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cocoa_percent =</span> <span class="fu">as.numeric</span>(<span class="fu">sub</span>(<span class="st">"%"</span>, <span class="st">""</span>, cocoa_percent))) <span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(cocoa_percent, rating) <span class="sc">|&gt;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(cocoa_percent) <span class="sc">|&gt;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(cocoa_percent) <span class="sc">|&gt;</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">ave_rating =</span> <span class="fu">mean</span>(rating))</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(summary_data, <span class="fu">aes</span>(<span class="at">x =</span> cocoa_percent, <span class="at">y =</span> ave_rating)) <span class="sc">+</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Percent of Cocoa in Chocolate Bar"</span>,</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Rating"</span>,</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Rating of Chocolate Bar by Percent Cocoa"</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="ChocolateRatings_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="ChocolateRatings_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
+<p>I really enjoyed making this visualization as I think it actually answers a question that I find interesting: “What is the ideal percent of cocoa in a chocolate bar?” The graph demonstrates a concave down curve, with a rough maximum at 68% cocoa. It is super cool to answer a question like this in my first project involving r. It also interesting to note that, as expected, the results aren’t linear or smooth. This suggests that maybe there are certain levels of cocoa percent that match flavor expectations. A good example of this is the data point at 50% cocoa, which is way higher than the points either side of it. Maybe exactly 50% cocoa is ideal, but 45% and 55% have an unappeasing taste.</p>
 
 
 

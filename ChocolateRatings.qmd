@@ -7,29 +7,53 @@ date: September 15, 2024
 format: html
 ---
 
+In the second part of my first project for my introductory data science course, I chose to visualize data that contains information about varying chocolates. The goal of my analysis and visualization is to display the ratings of different chocolates based on the percent of cocoa in them. 
+
+I retrieved this data from the 'tidytuesday' data set titled "Chocolate Ratings":
+
+<https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2022/2022-01-18/chocolate.csv>
+
+This dataset exists to provide information about various chocolate bars, including their ratings, origin, and cocoa percentages, helping to explore trends in chocolate quality and production.
+
+I sourced the data for this analysis from TidyTuesday, a project that curates weekly datasets for learning and exploration. The dataset, originally compiled by Georgios and Kelsey and published on the “Flavors of Cocoa” website, offers a detailed look into the world of chocolate ratings and origins.
+
 ```{r, message = FALSE, warning = FALSE}
-tuesdata <- tidytuesdayR::tt_load('2022-11-29')
-tuesdata <- tidytuesdayR::tt_load(2022, week = 48)
 tuesdata <- tidytuesdayR::tt_load('2022-01-18')
 tuesdata <- tidytuesdayR::tt_load(2022, week = 3)
 
 chocolate <- tuesdata$chocolate
 ```
-
+Here is the entire dataset that I used in my visualization. 
 ```{r, message=FALSE, warning=FALSE}
 library(tidyverse)
+chocolate
 ```
+Once again, it contains a lot of information, most of it unnecessary for the purposes of my visualization. 
+
+Here is the data that I actually used.
+
+```{r}
+chocolate |>
+  mutate(cocoa_percent = as.numeric(sub("%", "", cocoa_percent))) |>
+  select(cocoa_percent, rating) |>
+  group_by(cocoa_percent) |>
+  arrange(cocoa_percent) |>
+  summarise(ave_rating = mean(rating))
+```
+
+
 
 Below is a graph that shows the relationship between the percent of cocoa in a chocolate bar and how it is rated on a scale of 1 to 5.
 
 ```{r, message = FALSE, warning = FALSE}
 
 summary_data <- chocolate |>
+  mutate(cocoa_percent = as.numeric(sub("%", "", cocoa_percent))) |>
   select(cocoa_percent, rating) |>
   group_by(cocoa_percent) |>
+  arrange(cocoa_percent) |>
   summarise(ave_rating = mean(rating))
 
-summary_data$cocoa_percent <- as.numeric(gsub("%", "", summary_data$cocoa_percent))
 
 ggplot(summary_data, aes(x = cocoa_percent, y = ave_rating)) +
   geom_point() +
@@ -41,3 +65,6 @@ ggplot(summary_data, aes(x = cocoa_percent, y = ave_rating)) +
     title = "Rating of Chocolate Bar by Percent Cocoa"
   )
 ```
+I really enjoyed making this visualization as I think it actually answers a question that I find interesting: 
+"What is the ideal percent of cocoa in a chocolate bar?"
+The graph demonstrates a concave down curve, with a rough maximum at 68% cocoa. It is super cool to answer a question like this in my first project involving r. It also interesting to note that, as expected, the results aren't linear or smooth. This suggests that maybe there are certain levels of cocoa percent that match flavor expectations. A good example of this is the data point at 50% cocoa, which is way higher than the points either side of it. Maybe exactly 50% cocoa is ideal, but 45% and 55% have an unappeasing taste. 
