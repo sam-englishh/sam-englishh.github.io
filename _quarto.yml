@@ -12,15 +12,15 @@ website:
         href: about.qmd
       - text: "Data Viz"
         menu: 
-          - text: "Chocolate Ratings"
+          - text: "Chocolate Ratings vs. Cocoa Percentage"
             href: ChocolateRatings.html
-          - text: "World Cup"
+          - text: "World Cup Goals Over Time"
             href: WorldCup.html
-          - text: "Netflix Titles"
+          - text: "Netflix Title Analysis"
             href: "Mini Project 2.html"
-          - text: "Parental vs. Child Marijuana Use"
+          - text: "Generational Marijuana Use Statistical Analysis"
             href: "MiniProject3.html"
-          - text: "Auditory Analysis with WAI Data"
+          - text: "SQL Analysis of WAI Data for Auditory Research"
             href: "MiniProject4.html"
             
 

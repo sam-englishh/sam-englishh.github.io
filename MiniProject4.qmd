@@ -1,5 +1,5 @@
 ---
-title: "MiniProject4.qmd"
+title: "SQL Analysis of WAI Data for Auditory Research"
 author: "Sam English"
 date: 11/26/2024
 execute: 
@@ -9,10 +9,10 @@ execute:
 
 In this analysis, I aim to explore the Wideband Acoustic Immittance (WAI) database by recreating a plot of mean absorbance versus frequency for studies in the database. First, I will extract the data needed to recreate a plot similar to the one in Voss, including mean absorbance for each study, the number of unique ears, and the instruments used. Then, I will identify a study with participants from diverse demographic groups (e.g., males and females) and analyze differences in mean absorbance between these groups. This will involve grouping the data by study, demographic groups, and frequency and visualizing the trends.
 
-The data used in this analysis was obtained from the [Wideband Acoustic Immittance (WAI) Database](https://pmc.ncbi.nlm.nih.gov/articles/PMC7093226/figure/F1/) hosted by Smith College. The WAI database compiles published WAI measurements, which serve as noninvasive auditory diagnostic tools. These measurements include data from various peer-reviewed studies, and details about the database are available in the publication by Voss et al. (2019).
+The data used in this analysis was obtained from the [Wideband Acoustic Immittance (WAI) Database]<https://pmc.ncbi.nlm.nih.gov/articles/PMC7093226/figure/F1/> hosted by Smith College. The WAI database compiles published WAI measurements, which serve as noninvasive auditory diagnostic tools. These measurements include data from various peer-reviewed studies, and details about the database are available in the publication by Voss et al. (2019).
 
-
-```{r}
+Here are the three datasets that I use in my project. 
+```{r, message = FALSE, warning = FALSE}
 library(tidyverse)
 library(RMariaDB)
 con_wai <- dbConnect(
@@ -28,23 +28,24 @@ Measurements
 PI_Info
 Subjects
 ```
-
-```{r}
-dbListTables(con_wai)
-```
+Here I find all of the different names of tables available to access.  
 
 ```{sql, connection=con_wai}
 SHOW TABLES;
 ```
+
+This line of code describes each table.
 ```{sql, connection=con_wai}
 DESCRIBE Measurements;
 ```
-
+This shows the first 5 rows of the Measurements table.
 ```{sql, connection=con_wai}
 SELECT *
 FROM Measurements
 LIMIT 0, 5;
 ```
+
+Then, I selected the data that I wanted to use for my visualization. This code block extracts the information. 
 ```{sql, connection=con_wai}
 SELECT 
   Measurements.Identifier,
@@ -61,7 +62,7 @@ WHERE Measurements.Identifier IN ('Abur_2014', 'Feeney_207', 'Groon_2015', 'Lewi
 GROUP BY Measurements.Identifier, Measurements.Instrument, PI_Info.AuthorsShortList, Measurements.Frequency;
 ```
 
-
+In this code block, I output the data that I want to use with the name "data" so I can use ggplot in R to visualize it.
 ```{sql, connection=con_wai, output.var="data"}
 SELECT 
   Measurements.Identifier,
@@ -79,8 +80,8 @@ GROUP BY Measurements.Identifier, Measurements.Instrument, PI_Info.AuthorsShortL
 ```
 
 
+```{r, fig.alt= "Line graph showing mean absorbance across frequencies (200–8000 Hz) from various WAI database studies. Each colored line represents a study, with details on authors, year, sample size, and system (e.g., HearID, Titan, or non-commercial). Absorbance generally peaks between 2000–4000 Hz.", fig.height=8, fig.width=8}
 
-```{r, fig.height=8, fig.width=8}
 data$Frequency <- as.numeric(data$Frequency)
 data <- data |>
   filter(Frequency >= 200)
@@ -134,7 +135,7 @@ WHERE Measurements.Identifier = 'Abur_2014'
 GROUP BY Subjects.Sex, Measurements.Frequency;
 ```
 
-```{r, fig.height=9, fig.width=8}
+```{r, fig.alt= "Line graph showing frequency (200–8000 Hz) vs. mean absorbance by sex (Abur_2014). Three lines represent data for females (red), males (green), and unknown (blue). Absorbance peaks around 2000–4000 Hz, with the “unknown” category showing slightly higher values across frequencies compared to males and females.", fig.height=9, fig.width=8}
 ggplot(second_data, aes(x = Frequency, y = MeanAbsorbance, color = Sex)) +
   geom_line(size = 1) +
   labs(
