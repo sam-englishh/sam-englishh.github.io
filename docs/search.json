@@ -60,14 +60,14 @@
     "href": "Presentation.html#project-1---part-1---goals-scored-at-each-world-cup",
     "title": "Sam’s Website Presentation",
     "section": "Project 1 - Part 1 - Goals Scored at Each World Cup",
-    "text": "Project 1 - Part 1 - Goals Scored at Each World Cup\nThis analysis involved a dataset in tidytuesday that fascinated me as a soccer enthusiast, titled “World Cup”. The data included information on results, location, matches played and goals scored between 1930 and 2018, the most recent World Cup when the dataset was created. I chose to visualize the number of goals scored at each tournament dating back to 1930."
+    "text": "Project 1 - Part 1 - Goals Scored at Each World Cup\nThis analysis involved a dataset in tidytuesday that fascinated me as a soccer enthusiast, titled “World Cup”. The data included information on results, location, matches played and goals scored between 1930 and 2018, the most recent World Cup when the dataset was created.\nI chose to visualize the number of goals scored at each tournament dating back to 1930."
   },
   {
     "objectID": "Presentation.html#visualization",
     "href": "Presentation.html#visualization",
     "title": "Sam’s Website Presentation",
     "section": "Visualization",
-    "text": "Visualization\nI used piping to get the necessary information.\n\n\n# A tibble: 21 × 2\n# Groups:   year [21]\n    year goals_scored\n   &lt;dbl&gt;        &lt;dbl&gt;\n 1  1930           70\n 2  1934           70\n 3  1938           84\n 4  1950           88\n 5  1954          140\n 6  1958          126\n 7  1962           89\n 8  1966           89\n 9  1970           95\n10  1974           97\n# ℹ 11 more rows\n\n\nHere is my visualization."
+    "text": "Visualization\n\n\n# A tibble: 21 × 2\n# Groups:   year [21]\n    year goals_scored\n   &lt;dbl&gt;        &lt;dbl&gt;\n 1  1930           70\n 2  1934           70\n 3  1938           84\n 4  1950           88\n 5  1954          140\n 6  1958          126\n 7  1962           89\n 8  1966           89\n 9  1970           95\n10  1974           97\n# ℹ 11 more rows"
   },
   {
     "objectID": "Presentation.html#project-1---part-2---chocolate-ratngs-by-percent-cocoa",
@@ -81,21 +81,21 @@
     "href": "Presentation.html#visualization-1",
     "title": "Sam’s Website Presentation",
     "section": "Visualization",
-    "text": "Visualization\nHere is the piped data that I used. I had to convert percentages to numerics so I could order the data correctly.\n\nchocolate |&gt;\n  mutate(cocoa_percent = as.numeric(sub(\"%\", \"\", cocoa_percent))) |&gt;\n  select(cocoa_percent, rating) |&gt;\n  group_by(cocoa_percent) |&gt;\n  arrange(cocoa_percent) |&gt;\n  summarise(ave_rating = mean(rating))\n\n# A tibble: 46 × 2\n   cocoa_percent ave_rating\n           &lt;dbl&gt;      &lt;dbl&gt;\n 1          42         2.75\n 2          46         2.75\n 3          50         3.75\n 4          53         2   \n 5          55         2.86\n 6          56         3.25\n 7          57         2.75\n 8          58         3.12\n 9          60         3.01\n10          60.5       2.75\n# ℹ 36 more rows\n\n\nHere is my visualization."
+    "text": "Visualization\nHere is the piped data that I used. I had to convert percentages to numerics so I could order the data correctly.\n\nchocolate |&gt;\n  mutate(cocoa_percent = as.numeric(sub(\"%\", \"\", cocoa_percent))) |&gt;\n  select(cocoa_percent, rating) |&gt;\n  group_by(cocoa_percent) |&gt;\n  arrange(cocoa_percent) |&gt;\n  summarise(ave_rating = mean(rating))\n\n# A tibble: 46 × 2\n   cocoa_percent ave_rating\n           &lt;dbl&gt;      &lt;dbl&gt;\n 1          42         2.75\n 2          46         2.75\n 3          50         3.75\n 4          53         2   \n 5          55         2.86\n 6          56         3.25\n 7          57         2.75\n 8          58         3.12\n 9          60         3.01\n10          60.5       2.75\n# ℹ 36 more rows"
   },
   {
     "objectID": "Presentation.html#project-2---netflix-title-analysis",
     "href": "Presentation.html#project-2---netflix-title-analysis",
     "title": "Sam’s Website Presentation",
     "section": "Project 2 - Netflix Title Analysis",
-    "text": "Project 2 - Netflix Title Analysis\nIn this project, I focused on data involving Netflix titles and made three visualizations. The prupose of this project was to use piping to organize data, and focus on the use of regular expressions to assist in this process, so it is easier to understand and present."
+    "text": "Project 2 - Netflix Title Analysis\nIn this project, I focused on data involving Netflix titles and made three visualizations. The purpose of this project was to use piping to organize data, and focus on the use of regular expressions to assist in this process, so it is easier to understand and present."
   },
   {
     "objectID": "Presentation.html#visualization-1-1",
     "href": "Presentation.html#visualization-1-1",
     "title": "Sam’s Website Presentation",
     "section": "Visualization 1",
-    "text": "Visualization 1\nFirstly, I wanted to find the most common words in titles of Netflix shows and TV shows, excluding filler words like “the” and “and”. This is the organized dataset that was used for my visualization.\n\n\n# A tibble: 10 × 2\n# Groups:   words [10]\n   words         n\n   &lt;chr&gt;     &lt;int&gt;\n 1 love        152\n 2 my          127\n 3 you          81\n 4 man          79\n 5 christmas    78\n 6 world        69\n 7 story        67\n 8 life         66\n 9 movie        60\n10 little       58\n\n\nHere is the visualization."
+    "text": "Visualization 1\nFirstly, I wanted to find the most common words in titles of Netflix shows and TV shows, excluding filler words like “the” and “and”. This is the organized dataset that was used for my visualization.\n\n\n# A tibble: 10 × 2\n# Groups:   words [10]\n   words         n\n   &lt;chr&gt;     &lt;int&gt;\n 1 love        152\n 2 my          127\n 3 you          81\n 4 man          79\n 5 christmas    78\n 6 world        69\n 7 story        67\n 8 life         66\n 9 movie        60\n10 little       58"
   },
   {
     "objectID": "Presentation.html#visualization-2",
@@ -109,14 +109,14 @@
     "href": "Presentation.html#visualization-3",
     "title": "Sam’s Website Presentation",
     "section": "Visualization 3",
-    "text": "Visualization 3\nFinally, I decided to find the percent of titles that either contain a digit anywhere in their title, start with “the” or have the word “the” anywhere and showed this information on a bar graph. This turned out to be far more difficult than I expected. I found it hard to name the axis labels separate from the variable names, which were sometimes confusing. Here is my code:\nHere is the visualization that came from this dataset."
+    "text": "Visualization 3\nFinally, I decided to find the percent of titles that either contain a digit anywhere in their title, start with “the” or have the word “the” anywhere and showed this information on a bar graph. This turned out to be far more difficult than I expected. I found it hard to name the axis labels separate from the variable names, which were sometimes confusing, as you can imagine."
   },
   {
     "objectID": "Presentation.html#project-3---generational-marijuana-use",
     "href": "Presentation.html#project-3---generational-marijuana-use",
     "title": "Sam’s Website Presentation",
     "section": "Project 3 - Generational Marijuana Use",
-    "text": "Project 3 - Generational Marijuana Use\nThis project involved running permutation tests assuming a null hypothesis to test whether a relationship exists between two variables. In my analysis, I was testing the relationship between parental and child use of marijuana. This was my favourite project. I really enjoyed running the statistical analysis and demonstrating the data."
+    "text": "Project 3 - Generational Marijuana Use\nThis project involved running permutation tests assuming a null hypothesis to test whether a relationship exists between two variables. In my analysis, I tested the relationship between parental and child use of marijuana. This was my favorite project. I really enjoyed running the statistical analysis and demonstrating the data."
   },
   {
     "objectID": "Presentation.html#visualization-4",
@@ -144,6 +144,20 @@
     "href": "Presentation.html#visualization-2-1",
     "title": "Sam’s Website Presentation",
     "section": "Visualization 2",
-    "text": "Visualization 2\nIn my second visualization I compare the mean absorbances across the study conducted by Abur in 2004. I differentiate between Men, Women and the studies where the sex of the subject was unknown. Here is the visualization."
+    "text": "Visualization 2\nIn my second visualization I compare the mean absorbances across the study conducted by Abur in 2004. I differentiate between Men, Women and the studies where the sex of the subject was unknown."
+  },
+  {
+    "objectID": "Presentation.html#project-1---part-2---chocolate-ratings-by-percent-cocoa",
+    "href": "Presentation.html#project-1---part-2---chocolate-ratings-by-percent-cocoa",
+    "title": "Sam’s Website Presentation",
+    "section": "Project 1 - Part 2 - Chocolate Ratings by Percent Cocoa",
+    "text": "Project 1 - Part 2 - Chocolate Ratings by Percent Cocoa\nIn this analysis, I chose another dataset that intrigued me, titled “Chocolate Ratings”. I visualized the data with an aim to find the optimal percent of cocoa in a chocolate bar, in terms of ratings."
+  },
+  {
+    "objectID": "Presentation.html#thank-you",
+    "href": "Presentation.html#thank-you",
+    "title": "Sam’s Website Presentation",
+    "section": "Thank You",
+    "text": "Thank You"
   }
 ]
