@@ -10,7 +10,7 @@ website:
         text: Home
       - text: About
         href: about.qmd
-      - text: "Data Viz"
+      - text: "Projects"
         menu: 
           - text: "Chocolate Ratings vs. Cocoa Percentage"
             href: ChocolateRatings.html
@@ -22,6 +22,8 @@ website:
             href: "MiniProject3.html"
           - text: "SQL Analysis of WAI Data for Auditory Research"
             href: "MiniProject4.html"
+      - text: "Presentations"
+        menu: 
           - text: "Project Presentation"
             href: "Presentation.html"
             
