@@ -45,7 +45,7 @@ chocolate |>
 
 Below is a graph that shows the relationship between the percent of cocoa in a chocolate bar and how it is rated on a scale of 1 to 5.
 
-```{r, fig.alt="Scatterplot showing the relationship between the percentage of cocoa in chocolate bars and their ratings. The graph includes a trendline indicating a rise in ratings up to around 70% cocoa, followed by a gradual decline." message = FALSE, warning = FALSE}
+```{r, fig.alt="Scatterplot showing the relationship between the percentage of cocoa in chocolate bars and their ratings. The graph includes a trendline indicating a rise in ratings up to around 70% cocoa, followed by a gradual decline.", message = FALSE, warning = FALSE}
 
 summary_data <- chocolate |>
   mutate(cocoa_percent = as.numeric(sub("%", "", cocoa_percent))) |>

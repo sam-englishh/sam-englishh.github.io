@@ -17,11 +17,13 @@ website:
           - text: "World Cup Goals Over Time"
             href: WorldCup.html
           - text: "Netflix Title Analysis"
-            href: "Mini Project 2.html"
+            href: "MiniProject2.html"
           - text: "Generational Marijuana Use Statistical Analysis"
             href: "MiniProject3.html"
           - text: "SQL Analysis of WAI Data for Auditory Research"
             href: "MiniProject4.html"
+          - text: "Project Presentation"
+            href: "Presentation.html"
             
 
          
