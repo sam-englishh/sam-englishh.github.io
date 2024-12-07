@@ -188,7 +188,7 @@ ggplot(netflix_by_year, aes(x = release_year, y = count, color = type)) +
 Finally, I decided to find the percent of titles that either contain a digit anywhere in their title, start with "the" or have the word "the" anywhere and showed this information on a bar graph. This turned out to be far more difficult than I expected. I found it hard to name the axis labels separate from the variable names, which were sometimes confusing. Here is my code:
 
 ```{r}
-#| echo: true
+#| echo: false
 #| eval: true
 total_titles <- nrow(netflix)
 
