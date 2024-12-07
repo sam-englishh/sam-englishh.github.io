@@ -19,10 +19,10 @@ execute:
 This analysis involved a dataset in tidytuesday that fascinated me as a soccer enthusiast, titled "World Cup".
 The data included information on results, location, matches played and goals scored between 1930 and 2018, the
 most recent World Cup when the dataset was created.
+
 I chose to visualize the number of goals scored at each tournament dating back to 1930.
 
 ## Visualization
-I used piping to get the necessary information.
 
 ```{r, message = FALSE, warning = FALSE}
 #| echo: false
@@ -33,8 +33,6 @@ worldcups |>
   group_by(year) |>
   select(goals_scored)
 ```
-Here is my visualization.
-
 
 ```{r, out.width= "80%", out.height= "75%", fig.align='center'}
 #| echo: false
@@ -54,9 +52,9 @@ ggplot(worldcups, aes(x = year, y = goals_scored)) +
   )
 ```
 
-## Project 1 - Part 2 - Chocolate Ratngs by Percent Cocoa
+## Project 1 - Part 2 - Chocolate Ratings by Percent Cocoa
 
-In this analysis, I chose another dataset that intrigued me titled "Chocolate Ratings". I visualized the data with an aim to find the optimal percent of cocoa in a chocolate bar, in terms of ratings.
+In this analysis, I chose another dataset that intrigued me, titled "Chocolate Ratings". I visualized the data with an aim to find the optimal percent of cocoa in a chocolate bar, in terms of ratings.
 
 ## Visualization
 
@@ -83,7 +81,6 @@ chocolate |>
   arrange(cocoa_percent) |>
   summarise(ave_rating = mean(rating))
 ```
-Here is my visualization.
 
 ```{r, out.width= "80%", out.height= "75%", fig.align='center'}
 #| echo: false
@@ -109,7 +106,7 @@ ggplot(summary_data, aes(x = cocoa_percent, y = ave_rating)) +
 ```
 ## Project 2 - Netflix Title Analysis
 
-In this project, I focused on data involving Netflix titles and made three visualizations. The prupose of this project was to use piping to organize data, and focus on the use of regular expressions to assist in this process, so it is easier to understand and present.
+In this project, I focused on data involving Netflix titles and made three visualizations. The purpose of this project was to use piping to organize data, and focus on the use of regular expressions to assist in this process, so it is easier to understand and present.
 
 ## Visualization 1
 
@@ -149,8 +146,6 @@ common_words <- netflix |>
 common_words
 ```
 
-Here is the visualization.
-
 ```{r, out.width= "80%", out.height= "75%", fig.align='center'}
 #| echo: false
 #| eval: true
@@ -185,7 +180,7 @@ ggplot(netflix_by_year, aes(x = release_year, y = count, color = type)) +
 ```
 ## Visualization 3
 
-Finally, I decided to find the percent of titles that either contain a digit anywhere in their title, start with "the" or have the word "the" anywhere and showed this information on a bar graph. This turned out to be far more difficult than I expected. I found it hard to name the axis labels separate from the variable names, which were sometimes confusing. Here is my code:
+Finally, I decided to find the percent of titles that either contain a digit anywhere in their title, start with "the" or have the word "the" anywhere and showed this information on a bar graph. This turned out to be far more difficult than I expected. I found it hard to name the axis labels separate from the variable names, which were sometimes confusing, as you can imagine.  
 
 ```{r}
 #| echo: false
@@ -212,7 +207,6 @@ prop_titles_long <- prop_titles |>
   ) |>
   select(condition, proportion)
 ```
-Here is the visualization that came from this dataset.
 
 ```{r, out.width= "80%", out.height= "75%", fig.align='center'}
 #| echo: false
@@ -240,7 +234,7 @@ ggplot(prop_titles_long, aes(x = condition, y = proportion, fill = condition)) +
 
 ## Project 3 - Generational Marijuana Use
 
-This project involved running permutation tests assuming a null hypothesis to test whether a relationship exists between two variables. In my analysis, I was testing the relationship between parental and child use of marijuana. This was my favourite project. I really enjoyed running the statistical analysis and demonstrating the data.
+This project involved running permutation tests assuming a null hypothesis to test whether a relationship exists between two variables. In my analysis, I tested the relationship between parental and child use of marijuana. This was my favorite project. I really enjoyed running the statistical analysis and demonstrating the data.
 
 ## Visualization
 
@@ -335,7 +329,7 @@ WHERE Measurements.Identifier IN ('Abur_2014', 'Feeney_207', 'Groon_2015', 'Lewi
 GROUP BY Measurements.Identifier, Measurements.Instrument, PI_Info.AuthorsShortList, Measurements.Frequency;
 ```
 
-```{sql, connection=con_wai, output.var="data", echo= FALSE, eval= TRUE}
+```{sql, connection=con_wai, output.var="data", echo= TRUE, eval= TRUE}
 SELECT 
   Measurements.Identifier,
   COUNT(DISTINCT CONCAT(Measurements.SubjectNumber, Measurements.Ear)) AS Unique_Ears,
@@ -351,7 +345,7 @@ WHERE Measurements.Identifier IN ('Abur_2014', 'Feeney_207', 'Groon_2015', 'Lewi
 GROUP BY Measurements.Identifier, Measurements.Instrument, PI_Info.AuthorsShortList, Measurements.Frequency;
 ```
 
-```{r}
+```{r, out.width= "80%", out.height= "75%", fig.align='center'}
 #| echo: false
 #| eval: true
 data$Frequency <- as.numeric(data$Frequency)
@@ -386,7 +380,7 @@ ggplot(data, aes(x = Frequency, y = MeanAbsorbance, color = LegendLabel)) +
 
 ## Visualization 2
 
-In my second visualization I compare the mean absorbances across the study conducted by Abur in 2004. I differentiate between Men, Women and the studies where the sex of the subject was unknown. Here is the visualization.
+In my second visualization I compare the mean absorbances across the study conducted by Abur in 2004. I differentiate between Men, Women and the studies where the sex of the subject was unknown. 
 
 ```{sql, connection=con_wai, echo= FALSE, eval= FALSE}
 
@@ -437,6 +431,9 @@ ggplot(second_data, aes(x = Frequency, y = MeanAbsorbance, color = Sex)) +
     plot.title = element_text(hjust = 0.5)
   )
 ```
+
+## Thank You
+
 
 
 

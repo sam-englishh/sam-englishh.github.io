@@ -1,0 +1,463 @@
+---
+title: "Sam's Website Presentation"
+author: "Sam English"
+subtitle: "12/09/2024"
+format: 
+  revealjs:
+    scrollable: true
+    slide-number: true
+    show-slide-number: all
+    embed-resources: true
+execute: 
+  echo: true
+  warning: false
+  message: false
+---
+
+
+## Project 1 - Part 1 - Goals Scored at Each World Cup
+
+This analysis involved a dataset in tidytuesday that fascinated me as a soccer enthusiast, titled "World Cup".
+The data included information on results, location, matches played and goals scored between 1930 and 2018, the
+most recent World Cup when the dataset was created.
+
+I chose to visualize the number of goals scored at each tournament dating back to 1930.
+
+## Visualization
+
+
+```{r, message = FALSE, warning = FALSE}
+#| echo: false
+library(openintro)
+library(tidyverse)
+worldcups <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-11-29/worldcups.csv')
+worldcups |>
+  group_by(year) |>
+  select(goals_scored)
+```
+
+```{r, out.width= "80%", out.height= "75%", fig.align='center'}
+#| echo: false
+#| eval: true
+
+library(ggplot2)
+
+worldcups <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-11-29/worldcups.csv')
+
+ggplot(worldcups, aes(x = year, y = goals_scored)) + 
+  geom_point() + 
+  geom_smooth(se = FALSE) +
+  labs(
+    x = "World Cup Year",
+    y = "Number of Goals Scored",
+    title = "Number of Goals Scored Per World Cup"
+  )
+```
+
+
+## Project 1 - Part 2 - Chocolate Ratings by Percent Cocoa
+
+In this analysis, I chose another dataset that intrigued me, titled "Chocolate Ratings". I visualized the data with an aim to find the optimal percent of cocoa in a chocolate bar, in terms of ratings.
+
+## Visualization
+
+Here is the piped data that I used. I had to convert percentages to numerics so I could order the data correctly.
+
+
+```{r}
+#| echo: false
+#| eval: true
+
+tuesdata <- tidytuesdayR::tt_load('2022-01-18')
+tuesdata <- tidytuesdayR::tt_load(2022, week = 3)
+
+chocolate <- tuesdata$chocolate
+```
+
+```{r}
+#| echo: true
+#| eval: true
+
+chocolate |>
+  mutate(cocoa_percent = as.numeric(sub("%", "", cocoa_percent))) |>
+  select(cocoa_percent, rating) |>
+  group_by(cocoa_percent) |>
+  arrange(cocoa_percent) |>
+  summarise(ave_rating = mean(rating))
+```
+
+```{r, out.width= "80%", out.height= "75%", fig.align='center'}
+#| echo: false
+#| eval: true
+
+summary_data <- chocolate |>
+  mutate(cocoa_percent = as.numeric(sub("%", "", cocoa_percent))) |>
+  select(cocoa_percent, rating) |>
+  group_by(cocoa_percent) |>
+  arrange(cocoa_percent) |>
+  summarise(ave_rating = mean(rating))
+
+
+ggplot(summary_data, aes(x = cocoa_percent, y = ave_rating)) +
+  geom_point() +
+  geom_smooth(se = FALSE) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(
+    x = "Percent of Cocoa in Chocolate Bar",
+    y = "Rating",
+    title = "Rating of Chocolate Bar by Percent Cocoa"
+  )
+```
+
+## Project 2 - Netflix Title Analysis
+
+In this project, I focused on data involving Netflix titles and made three visualizations. The purpose of this project was to use piping to organize data, and focus on the use of regular expressions to assist in this process, so it is easier to understand and present.
+
+## Visualization 1
+
+
+```{r}
+#| echo: false
+#| eval: true
+tuesdata <- tidytuesdayR::tt_load('2021-04-20')
+tuesdata <- tidytuesdayR::tt_load(2021, week = 17)
+netflix <- tuesdata$netflix
+
+library(dplyr)
+library(tidytext)
+library(tidyr)
+library(stringr)
+library(ggplot2)
+```
+
+Firstly, I wanted to find the most common words in titles of Netflix shows and TV shows, excluding filler words like "the" and "and". This is the organized dataset that was used for my visualization.
+
+```{r}
+#| echo: false
+#| eval: true
+stop_words <- c("the", "a", "of", "and", "in", "on", "with", "is", "to", "for", "at", "s", "2", "i")
+
+common_words <- netflix |>
+  mutate(title = str_to_lower(title),                               
+         title = str_replace_all(title, "\\p{P}", " ")) |>     
+  rowwise() |>     #Process each row of the dataset separately, allowing for operations like splitting words in each title.                                                  
+  mutate(words = str_split(title, "\\s+")) |> # split words separated by spaces             
+  unnest(words) |>      # Each word from a title becomes its own row.             
+  filter(!words %in% stop_words, words != "") |>                                            
+  group_by(words) |>                                      
+  mutate(n = n()) |>                                            
+  arrange(desc(n)) |>                                          
+  distinct(words, n, .keep_all = TRUE) |>
+  select(words, n) |>
+  head(10)
+
+common_words
+```
+
+```{r, out.width= "80%", out.height= "75%", fig.align='center'}
+#| echo: false
+#| eval: true
+
+ggplot(common_words, aes(x = reorder(words, -n),  y = n)) + 
+  geom_bar(stat = "identity", fill = "pink") +
+  labs(title = "Most Common Words in Netflix Titles", 
+       x = "Words", 
+       y = "Frequency") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+## Visualization 2
+
+Secondly, I compared the number of titles on Netflix that were movies or TV Shows, and their release dates. 
+
+
+```{r, out.width= "80%", out.height= "75%", fig.align='center'}
+#| echo: false
+#| eval: true
+
+netflix_by_year <- netflix |>
+  group_by(release_year, type) |>
+  summarise(count = n())  
+
+netflix_by_year
+
+ggplot(netflix_by_year, aes(x = release_year, y = count, color = type)) +
+  geom_line() +
+  labs(title = "Number of Movies and TV Shows Released by Year on Netflix", 
+       x = "Release Year", 
+       y = "Count") +
+  theme_minimal()
+```
+
+## Visualization 3
+
+Finally, I decided to find the percent of titles that either contain a digit anywhere in their title, start with "the" or have the word "the" anywhere and showed this information on a bar graph. This turned out to be far more difficult than I expected. I found it hard to name the axis labels separate from the variable names, which were sometimes confusing, as you can imagine.  
+
+
+```{r}
+#| echo: false
+#| eval: true
+total_titles <- nrow(netflix)
+
+prop_titles <- netflix |>
+  mutate(title = str_to_lower(title)) |> 
+  summarise(
+    count_numbers = sum(str_detect(title, "\\d")),  
+    count_the_anywhere = sum(str_detect(title, "the")),  
+    count_the_start = sum(str_detect(title, "^the"))) |>
+  mutate(
+    The_Anywhere = count_the_anywhere / total_titles, 
+    Start_With_The = count_the_start / total_titles, 
+    Digit_Anywhere = count_numbers / total_titles  
+  )
+
+prop_titles_long <- prop_titles |>
+  pivot_longer( 
+    cols = c(The_Anywhere, Start_With_The, Digit_Anywhere),  
+    names_to = "condition",              
+    values_to = "proportion"             
+  ) |>
+  select(condition, proportion)
+```
+
+```{r, out.width= "80%", out.height= "75%", fig.align='center'}
+#| echo: false
+#| eval: true
+ggplot(prop_titles_long, aes(x = condition, y = proportion, fill = condition)) +
+  geom_bar(stat = "identity") +
+  labs(
+    title = "Proportions of Words in Netflix Titles",
+    x = "Title Condition",
+    y = "Proportion",
+    fill = "Condition"
+  ) +
+  scale_y_continuous(labels = scales::percent) +
+  scale_x_discrete(labels = c(
+    The_Anywhere = '"The" anywhere',
+    Start_With_The = 'Start with "The"',
+    Digit_Anywhere = '"Digit" anywhere')) +
+  scale_fill_discrete(labels = c(
+    The_Anywhere = '"The" anywhere',
+    Start_With_The = 'Start with "The"',
+    Digit_Anywhere = '"Digit" anywhere')) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+
+## Project 3 - Generational Marijuana Use
+
+This project involved running permutation tests assuming a null hypothesis to test whether a relationship exists between two variables. In my analysis, I tested the relationship between parental and child use of marijuana. This was my favorite project. I really enjoyed running the statistical analysis and demonstrating the data.
+
+## Visualization
+
+I first found the percentage difference between students' use of marijuana if their parents' used it vs. if they didn't. There is a 19.5% higher chance that a student uses marijuana if their parents' did. 
+
+
+```{r}
+#| echo: false
+#| eval: true
+
+library(openintro)
+data(drug_use)
+drug_use
+
+library(dplyr)
+observed_data <- drug_use |>
+  group_by(parents) |>
+  summarise(child_use_avg = mean(student == "uses")) |>
+  summarise(difference = diff(child_use_avg)) |>
+  pull(difference)
+observed_data 
+```
+
+Then I ran 1000 permutation tests to find the statistical likelihood of this happening without a relationship.  i.e. assuming the null hypothesis of no relationship. On this graph you can see the results of the analysis, where the red line represents the proportional difference in the actual data.
+
+
+```{r, out.width= "80%", out.height= "75%", fig.align='center'}
+#| echo: false
+#| eval: true
+
+library(purrr)
+perm_test <- function(data) {
+  data |>
+    mutate(student_samp = sample(student, replace = FALSE)) |>
+    group_by(parents) |>
+    summarise(child_use_avg = mean(student_samp == "uses")) |>
+    summarise(difference = diff(child_use_avg)) |>
+    pull(difference)
+}
+
+observed_data <- drug_use |>
+  group_by(parents) |>
+  summarise(child_use_avg = mean(student == "uses", na.rm = TRUE)) |>
+  summarise(difference = diff(child_use_avg)) |>
+  pull(difference)
+n_perm <- 1000
+
+perm_results <- map_dbl(1:n_perm, ~perm_test(drug_use))
+
+ggplot(data.frame(perm_results), aes(x = perm_results)) +
+  geom_histogram(bins = 30, color = "black", fill = "skyblue") +
+  geom_vline(xintercept = observed_data, color = "red") +
+  labs(title = "Permutation Test: Difference in Child Marijuana Use Rates",
+       x = "Difference in Rates", y = "Frequency") +
+  theme_minimal()
+```
+
+Using this data I found a p-value of 0.
+
+## Project 4 - SQL Analysis of WAI Data for Auditory Research
+
+In this project, I aimed to recreate a graph that demonstrates the relationship between the mean absorbance of sound and the frequency at which it is played. I then made my own graph, comparing mean absorbance across frequencies for people who identify as males, females or unknown sexes in studies conducted by Abur in 2004. 
+
+## Visualization 1
+
+Here is my attempt at recreating the graph shown at <https://pmc.ncbi.nlm.nih.gov/articles/PMC7093226/#F1>.
+
+
+```{r}
+#| echo: false
+#| eval: true
+library(tidyverse)
+library(RMariaDB)
+con_wai <- dbConnect(
+  MariaDB(), host = "scidb.smith.edu",
+  user = "waiuser", password = "smith_waiDB", 
+  dbname = "wai"
+)
+Measurements <- tbl(con_wai, "Measurements")
+PI_Info <- tbl(con_wai, "PI_Info")
+Subjects <- tbl(con_wai, "Subjects")
+```
+
+```{sql, connection=con_wai, echo= FALSE, eval= FALSE}
+SELECT 
+  Measurements.Identifier,
+  COUNT(DISTINCT CONCAT(Measurements.SubjectNumber, Measurements.Ear)) AS Unique_Ears,
+  PI_Info.AuthorsShortList,
+  Measurements.Instrument,
+  Measurements.Frequency,
+  AVG(Measurements.Absorbance) AS MeanAbsorbance,
+  CONCAT(PI_Info.AuthorsShortList, ' et al. N=', 
+         COUNT(DISTINCT CONCAT(Measurements.SubjectNumber, Measurements.Ear)), ', ', Measurements.Instrument) AS LegendLabel
+FROM Measurements
+JOIN PI_Info ON Measurements.Identifier = PI_Info.Identifier
+WHERE Measurements.Identifier IN ('Abur_2014', 'Feeney_207', 'Groon_2015', 'Lewis_2015', 'Liu_2008', 'Rosowski_2012', 'Shahnaz_2006', 'Shaver_2013', 'Sun_2016', 'Voss_1994', 'Voss_2010', 'Werner_2010')
+GROUP BY Measurements.Identifier, Measurements.Instrument, PI_Info.AuthorsShortList, Measurements.Frequency;
+```
+
+```{sql, connection=con_wai, output.var="data", echo= TRUE, eval= TRUE}
+SELECT 
+  Measurements.Identifier,
+  COUNT(DISTINCT CONCAT(Measurements.SubjectNumber, Measurements.Ear)) AS Unique_Ears,
+  PI_Info.AuthorsShortList,
+  Measurements.Instrument,
+  Measurements.Frequency,
+  AVG(Measurements.Absorbance) AS MeanAbsorbance,
+  CONCAT(PI_Info.AuthorsShortList, ' et al. N=', 
+         COUNT(DISTINCT CONCAT(Measurements.SubjectNumber, Measurements.Ear)), ', ', Measurements.Instrument) AS LegendLabel
+FROM Measurements
+JOIN PI_Info ON Measurements.Identifier = PI_Info.Identifier
+WHERE Measurements.Identifier IN ('Abur_2014', 'Feeney_207', 'Groon_2015', 'Lewis_2015', 'Liu_2008', 'Rosowski_2012', 'Shahnaz_2006', 'Shaver_2013', 'Sun_2016', 'Voss_1994', 'Voss_2010', 'Werner_2010')
+GROUP BY Measurements.Identifier, Measurements.Instrument, PI_Info.AuthorsShortList, Measurements.Frequency;
+```
+
+```{r, out.width= "80%", out.height= "75%", fig.align='center'}
+#| echo: false
+#| eval: true
+data$Frequency <- as.numeric(data$Frequency)
+data <- data |>
+  filter(Frequency >= 200)
+
+ggplot(data, aes(x = Frequency, y = MeanAbsorbance, color = LegendLabel)) +
+  geom_line(size = 0.8) +
+  labs(
+    title = "Mean absorbance from each publication in WAI database",
+    x = "Frequency (Hz)",
+    y = "Mean Absorbance",
+    color = NULL
+  ) +
+  theme_minimal() +
+  scale_x_continuous(
+    trans = "log10",
+    breaks = c(200, 400, 600, 800, 1000, 2000, 4000, 6000, 8000),
+    labels = c("200", "400", "600", "800", "1000", "2000", "4000", "6000", "8000"),
+    limits = c(200, 8000)
+  ) +
+  scale_y_continuous(
+    limits = c(0, 1),
+    expand = c(0, 0)
+  ) +
+  theme(
+    legend.position = "right",
+    legend.text = element_text(size = 8), 
+    plot.title = element_text(hjust = 0.5)
+  )
+```
+
+
+## Visualization 2
+
+In my second visualization I compare the mean absorbances across the study conducted by Abur in 2004. I differentiate between Men, Women and the studies where the sex of the subject was unknown. 
+
+
+```{sql, connection=con_wai, echo= FALSE, eval= FALSE}
+
+SELECT 
+  Subjects.Sex, 
+  Measurements.Frequency, 
+  AVG(Measurements.Absorbance) AS MeanAbsorbance
+FROM Measurements
+JOIN Subjects ON Measurements.SubjectNumber = Subjects.SubjectNumber
+WHERE Measurements.Identifier = 'Abur_2014'
+GROUP BY Subjects.Sex, Measurements.Frequency;
+```
+
+```{sql, connection=con_wai, output.var="second_data", echo= FALSE}
+SELECT 
+  Subjects.Sex, 
+  Measurements.Frequency, 
+  AVG(Measurements.Absorbance) AS MeanAbsorbance
+FROM Measurements
+JOIN Subjects ON Measurements.SubjectNumber = Subjects.SubjectNumber
+WHERE Measurements.Identifier = 'Abur_2014'
+GROUP BY Subjects.Sex, Measurements.Frequency;
+```
+
+```{r, out.width= "80%", out.height= "75%", fig.align='center'}
+#| echo: false
+#| eval: true
+ggplot(second_data, aes(x = Frequency, y = MeanAbsorbance, color = Sex)) +
+  geom_line(size = 1) +
+  labs(
+    title = "Frequency vs. Mean Absorbance by Sex (Abur_2014)",
+    x = "Frequency (Hz)",
+    y = "Mean Absorbance",
+    color = "Sex"
+  ) +
+  theme_minimal() +
+  scale_x_continuous(
+    trans = "log10",
+    breaks = c(200, 400, 600, 800, 1000, 2000, 4000, 6000, 8000),
+    labels = c("200", "400", "600", "800", "1000", "2000", "4000", "6000", "8000"),
+    limits = c(200, 8000)
+  ) +
+  scale_y_continuous(
+    limits = c(0, 1),
+    expand = c(0, 0)
+  ) +
+  theme(
+    legend.position = "right",
+    plot.title = element_text(hjust = 0.5)
+  )
+```
+
+
+## Thank You
+
+
+
+
+
+

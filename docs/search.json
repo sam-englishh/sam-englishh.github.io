@@ -137,7 +137,7 @@
     "href": "Presentation.html#visualization-1-2",
     "title": "Sam’s Website Presentation",
     "section": "Visualization 1",
-    "text": "Visualization 1\nHere is my attempt at recreating the graph shown at https://pmc.ncbi.nlm.nih.gov/articles/PMC7093226/#F1."
+    "text": "Visualization 1\nHere is my attempt at recreating the graph shown at https://pmc.ncbi.nlm.nih.gov/articles/PMC7093226/#F1.\n\nSELECT \n  Measurements.Identifier,\n  COUNT(DISTINCT CONCAT(Measurements.SubjectNumber, Measurements.Ear)) AS Unique_Ears,\n  PI_Info.AuthorsShortList,\n  Measurements.Instrument,\n  Measurements.Frequency,\n  AVG(Measurements.Absorbance) AS MeanAbsorbance,\n  CONCAT(PI_Info.AuthorsShortList, ' et al. N=', \n         COUNT(DISTINCT CONCAT(Measurements.SubjectNumber, Measurements.Ear)), ', ', Measurements.Instrument) AS LegendLabel\nFROM Measurements\nJOIN PI_Info ON Measurements.Identifier = PI_Info.Identifier\nWHERE Measurements.Identifier IN ('Abur_2014', 'Feeney_207', 'Groon_2015', 'Lewis_2015', 'Liu_2008', 'Rosowski_2012', 'Shahnaz_2006', 'Shaver_2013', 'Sun_2016', 'Voss_1994', 'Voss_2010', 'Werner_2010')\nGROUP BY Measurements.Identifier, Measurements.Instrument, PI_Info.AuthorsShortList, Measurements.Frequency;"
   },
   {
     "objectID": "Presentation.html#visualization-2-1",
