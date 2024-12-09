@@ -9,7 +9,14 @@ execute:
 
 In this analysis, I aim to explore the Wideband Acoustic Immittance (WAI) database by recreating a plot of mean absorbance versus frequency for studies in the database. First, I will extract the data needed to recreate a plot similar to the one in Voss, including mean absorbance for each study, the number of unique ears, and the instruments used. Then, I will identify a study with participants from diverse demographic groups (e.g., males and females) and analyze differences in mean absorbance between these groups. This will involve grouping the data by study, demographic groups, and frequency and visualizing the trends.
 
-The data used in this analysis was obtained from the [Wideband Acoustic Immittance (WAI) Database]<https://pmc.ncbi.nlm.nih.gov/articles/PMC7093226/figure/F1/> hosted by Smith College. The WAI database compiles published WAI measurements, which serve as noninvasive auditory diagnostic tools. These measurements include data from various peer-reviewed studies, and details about the database are available in the publication by Voss et al. (2019).
+The data used in this analysis was obtained from the [Wideband Acoustic Immittance (WAI) Database] hosted by Smith College. The WAI database compiles published WAI measurements, which serve as noninvasive auditory diagnostic tools. These measurements include data from various peer-reviewed studies, and details about the database are available in the publication by Voss et al. (2019).
+
+The analysis reproduces **Figure 1** from the article:
+**Voss, Susan E. Ph.D. (2019).** *Resource Review.* *Ear and Hearing, 40*(6), p. 1481, November/December 2019.
+[DOI: 10.1097/AUD.0000000000000790](https://doi.org/10.1097/AUD.0000000000000790)
+
+Here is the source for the 2004 study conducted by Abur, which I refer to in the second part of my project.
+Abur, D., Horton, N. J., & Voss, S. E. (2014).** Wideband acoustic immittance measures in normal-hearing adults: Test-retest reliability and effects of ear-canal pressurization. *Hearing Research, 316*, 23–31. [DOI Link](https://doi.org/10.1016/j.heares.2014.07.001)
 
 Here are the three datasets that I use in my project. 
 ```{r, message = FALSE, warning = FALSE}
