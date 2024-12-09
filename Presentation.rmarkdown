@@ -14,6 +14,7 @@ execute:
   message: false
 ---
 
+
 ## Project 1 - Part 1 - Goals Scored at Each World Cup
 
 This analysis involved a dataset in tidytuesday that fascinated me as a soccer enthusiast, titled "World Cup".
@@ -23,6 +24,7 @@ most recent World Cup when the dataset was created.
 I chose to visualize the number of goals scored at each tournament dating back to 1930.
 
 ## Visualization
+
 
 ```{r, message = FALSE, warning = FALSE}
 #| echo: false
@@ -52,6 +54,7 @@ ggplot(worldcups, aes(x = year, y = goals_scored)) +
   )
 ```
 
+
 ## Project 1 - Part 2 - Chocolate Ratings by Percent Cocoa
 
 In this analysis, I chose another dataset that intrigued me, titled "Chocolate Ratings". I visualized the data with an aim to find the optimal percent of cocoa in a chocolate bar, in terms of ratings.
@@ -59,6 +62,7 @@ In this analysis, I chose another dataset that intrigued me, titled "Chocolate R
 ## Visualization
 
 Here is the piped data that I used. I had to convert percentages to numerics so I could order the data correctly.
+
 
 ```{r}
 #| echo: false
@@ -104,11 +108,13 @@ ggplot(summary_data, aes(x = cocoa_percent, y = ave_rating)) +
     title = "Rating of Chocolate Bar by Percent Cocoa"
   )
 ```
+
 ## Project 2 - Netflix Title Analysis
 
 In this project, I focused on data involving Netflix titles and made three visualizations. The purpose of this project was to use piping to organize data, and focus on the use of regular expressions to assist in this process, so it is easier to understand and present.
 
 ## Visualization 1
+
 
 ```{r}
 #| echo: false
@@ -123,7 +129,9 @@ library(tidyr)
 library(stringr)
 library(ggplot2)
 ```
+
 Firstly, I wanted to find the most common words in titles of Netflix shows and TV shows, excluding filler words like "the" and "and". This is the organized dataset that was used for my visualization.
+
 ```{r}
 #| echo: false
 #| eval: true
@@ -157,9 +165,11 @@ ggplot(common_words, aes(x = reorder(words, -n),  y = n)) +
        y = "Frequency") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
+
 ## Visualization 2
 
 Secondly, I compared the number of titles on Netflix that were movies or TV Shows, and their release dates. 
+
 
 ```{r, out.width= "80%", out.height= "75%", fig.align='center'}
 #| echo: false
@@ -178,9 +188,11 @@ ggplot(netflix_by_year, aes(x = release_year, y = count, color = type)) +
        y = "Count") +
   theme_minimal()
 ```
+
 ## Visualization 3
 
 Finally, I decided to find the percent of titles that either contain a digit anywhere in their title, start with "the" or have the word "the" anywhere and showed this information on a bar graph. This turned out to be far more difficult than I expected. I found it hard to name the axis labels separate from the variable names, which were sometimes confusing, as you can imagine.  
+
 
 ```{r}
 #| echo: false
@@ -232,6 +244,7 @@ ggplot(prop_titles_long, aes(x = condition, y = proportion, fill = condition)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
+
 ## Project 3 - Generational Marijuana Use
 
 This project involved running permutation tests assuming a null hypothesis to test whether a relationship exists between two variables. In my analysis, I tested the relationship between parental and child use of marijuana. This was my favorite project. I really enjoyed running the statistical analysis and demonstrating the data.
@@ -239,6 +252,7 @@ This project involved running permutation tests assuming a null hypothesis to te
 ## Visualization
 
 I first found the percentage difference between students' use of marijuana if their parents' used it vs. if they didn't. There is a 19.5% higher chance that a student uses marijuana if their parents' did. 
+
 
 ```{r}
 #| echo: false
@@ -256,7 +270,9 @@ observed_data <- drug_use |>
   pull(difference)
 observed_data 
 ```
+
 Then I ran 1000 permutation tests to find the statistical likelihood of this happening without a relationship.  i.e. assuming the null hypothesis of no relationship. On this graph you can see the results of the analysis, where the red line represents the proportional difference in the actual data.
+
 
 ```{r, out.width= "80%", out.height= "75%", fig.align='center'}
 #| echo: false
@@ -288,6 +304,7 @@ ggplot(data.frame(perm_results), aes(x = perm_results)) +
        x = "Difference in Rates", y = "Frequency") +
   theme_minimal()
 ```
+
 Using this data I found a p-value of 0.
 
 ## Project 4 - SQL Analysis of WAI Data for Auditory Research
@@ -297,6 +314,7 @@ In this project, I aimed to recreate a graph that demonstrates the relationship 
 ## Visualization 1
 
 Here is my attempt at recreating the graph shown at <https://pmc.ncbi.nlm.nih.gov/articles/PMC7093226/#F1>.
+
 
 ```{r}
 #| echo: false
@@ -375,9 +393,11 @@ ggplot(data, aes(x = Frequency, y = MeanAbsorbance, color = LegendLabel)) +
   )
 ```
 
+
 ## Visualization 2
 
 In my second visualization I compare the mean absorbances across the study conducted by Abur in 2004. I differentiate between Men, Women and the studies where the sex of the subject was unknown. 
+
 
 ```{sql, connection=con_wai, echo= FALSE, eval= FALSE}
 
@@ -390,6 +410,7 @@ JOIN Subjects ON Measurements.SubjectNumber = Subjects.SubjectNumber
 WHERE Measurements.Identifier = 'Abur_2014'
 GROUP BY Subjects.Sex, Measurements.Frequency;
 ```
+
 ```{sql, connection=con_wai, output.var="second_data", echo= FALSE}
 SELECT 
   Subjects.Sex, 
@@ -429,7 +450,9 @@ ggplot(second_data, aes(x = Frequency, y = MeanAbsorbance, color = Sex)) +
   )
 ```
 
+
 ## Thank You
+
 
 
 
