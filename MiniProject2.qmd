@@ -10,8 +10,7 @@ This is my second project using R to visualize data. The focus in this project i
 This analysis uses data from the tidy tuesday data source on titles of Netflix movies and TV show. [Netflix Titles]
 <https://github.com/rfordatascience/tidytuesday/blob/master/data/2021/2021-04-20/readme.md>
 
-the original data can be found on Kaggle at <https://www.kaggle.com/datasets/shivamb/netflix-shows>. It was published by Bansal. The data is titled "Netflix Movies and TV Shows", and consists of listings of all the movies and tv shows available on Netflix, along with details such as - cast, directors, ratings, release year, duration, etc.
-
+The original data can be found on Kaggle at <https://www.kaggle.com/datasets/shivamb/netflix-shows>. It was published by Bansal. The data is titled "Netflix Movies and TV Shows", and consists of listings of all the movies and tv shows available on Netflix, along with details such as - cast, directors, ratings, release year, duration, etc.
 
 
 Here is the entire dataset that I used. 
@@ -82,7 +81,7 @@ ggplot(netflix_by_year, aes(x = release_year, y = count, color = type)) +
   theme_minimal()
 
 ```
-This graph shows the number of movies and TV shows and their corresponding release years. It shows the increase in number of movies as the year heads towards present day. It also demonstrates the disparity of movies vs. TV shows. And that there has always been more movies than TT shows on Netflix. An interesting observation is in 2021, where there is growth in the number of TV shows released in this year, and a decline in movies. It is also cool to note that the earliest title on Netflix was released in 1925, and it is a TV show!! 
+This graph shows the number of movies and TV shows and their corresponding release years. It shows the increase in number of movies as the year heads towards present day. It also demonstrates the disparity of movies vs. TV shows. And that there has always been more movies than TT shows on Netflix. An interesting observation is in 2021, where there is growth in the number of TV shows released in this year, and a decline in movies. It is also cool to note that the earliest title on Netflix was released in 1925, and it is a TV show! 
 
 ```{r, fig.alt= "Bar chart titled “Proportions of Words in Netflix Titles” showing three conditions: “Digit” anywhere (red, around 5%), titles starting with “The” (green, around 15%), and “The” appearing anywhere (blue, around 25%). The proportions increase from left to right.", message = FALSE, warning = FALSE}
 
